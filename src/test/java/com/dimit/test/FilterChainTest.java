@@ -1,12 +1,17 @@
 package com.dimit.test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.junit.Test;
 
 import com.dimit.builder.ChainBuilder;
+import com.dimit.context.FilterChainContext;
 import com.dimit.intereface.CallBack;
 import com.dimit.intereface.FilterChain;
+import com.dimit.util.ClassScanHelper;
 
 public class FilterChainTest {
 
@@ -15,11 +20,31 @@ public class FilterChainTest {
 		FilterChain chain = ChainBuilder.build();
 		Predicate<Integer> p1 = (u) -> u < 7;
 		Predicate<Integer> p2 = (u) -> u < 5;
-		CallBack<String> c1 = () -> "ok";
-		CallBack<String> c2 = () -> "not ok";
+		CallBack<String> c1 = (t) -> {return "ok";};
+		CallBack<String> c2 = (t) -> {return "not ok";};
 		chain.addFilterByLast(p1, c1);
 		chain.addFilterByLast(p2, c2);
-		System.out.println(chain.doFilter(2));
+		System.out.println(chain.doFilter(5));
 	}
-
+	
+	@Test
+	public void classScanHelperTest(){
+		ClassScanHelper.init();
+		FilterChainContext context = FilterChainContext.getInstance();
+		FilterChain ageChain = context.getChain("ageChain");
+		System.out.println(ageChain.doFilter(70));
+	}
+	
+	@Test
+	public void contextTest(){
+		ClassScanHelper.init();
+		FilterChainContext context = FilterChainContext.getInstance();
+		FilterChain ageChain = context.getChain("ageChain");
+		Supplier<Map<String,String>> s = ()->{
+			Map<String,String> map = new HashMap<String, String> ();
+			map.put("zhangsan", "张三");
+			return map;
+		};
+		System.out.println(ageChain.doFilter(70, s));
+	}
 }
