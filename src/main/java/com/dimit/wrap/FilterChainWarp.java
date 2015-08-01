@@ -2,7 +2,9 @@ package com.dimit.wrap;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.dimit.intereface.Filte;
 
@@ -43,6 +45,18 @@ public class FilterChainWarp<T, R> {
 			}
 		});
 		return filters;
+	}
+	
+	/**
+	 * 获取当前链的所有filter名称
+	 * @return
+	 */
+	public Set<String> getFilterNames() {
+		Set<String> names = new HashSet<String>();
+		filterWraps.forEach(f -> {
+			names.add(f.getName());
+		});
+		return names;
 	}
 
 	// getter ...

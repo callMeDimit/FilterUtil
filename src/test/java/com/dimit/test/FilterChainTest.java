@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.dimit.builder.ChainBuilder;
 import com.dimit.context.FilterChainContext;
 import com.dimit.intereface.CallBack;
+import com.dimit.intereface.ChainFactory;
 import com.dimit.intereface.FilterChain;
 import com.dimit.util.ClassScanHelper;
 
@@ -30,21 +31,30 @@ public class FilterChainTest {
 	@Test
 	public void classScanHelperTest(){
 		ClassScanHelper.init();
-		FilterChainContext context = FilterChainContext.getInstance();
-		FilterChain ageChain = context.getChain("ageChain");
-		System.out.println(ageChain.doFilter(70));
+		ChainFactory context = FilterChainContext.getInstance();
+		FilterChain ageChain = context.getChainByName("ageChain");
+		System.out.println(ageChain.doFilter(10));
 	}
 	
 	@Test
 	public void contextTest(){
 		ClassScanHelper.init();
-		FilterChainContext context = FilterChainContext.getInstance();
-		FilterChain ageChain = context.getChain("ageChain");
+		ChainFactory context = FilterChainContext.getInstance();
+		FilterChain ageChain = context.getChainByName("ageChain");
 		Supplier<Map<String,String>> s = ()->{
 			Map<String,String> map = new HashMap<String, String> ();
 			map.put("zhangsan", "张三");
 			return map;
 		};
 		System.out.println(ageChain.doFilter(70, s));
+	}
+	
+	/**
+	 * 动态增加过滤器测试
+	 */
+	@Test
+	public void dymicAddFilterTest() {
+		ClassScanHelper.init();
+		ChainFactory context = FilterChainContext.getInstance();
 	}
 }

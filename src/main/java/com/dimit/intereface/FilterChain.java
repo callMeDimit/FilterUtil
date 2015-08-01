@@ -14,20 +14,28 @@ public interface FilterChain {
 	 * 在链尾增加过滤
 	 * @param filter
 	 */
-	<T, R, C> void addFilterByLast(Predicate<T> predicate, CallBack<R> callBack);
+	<T, R> void addFilterByLast(Predicate<T> predicate, CallBack<R> callBack);
 
 	/**
 	 * 在头部增加过滤器
 	 * @param filter
 	 */
-	<T, R, C> void addFilterByHead(Predicate<T> predicate, CallBack<R> callBack);
+	<T, R> void addFilterByHead(Predicate<T> predicate, CallBack<R> callBack);
 
 	/**
 	 * 在指定下标处增加过滤器
 	 * @param idx
+	 * @param predicate
+	 * @param callBack
+	 */
+	<T, R> void addFilterByIndex(int idx, Predicate<T> predicate, CallBack<R> callBack);
+
+	/**
+	 * 在指定位置加入过滤器
+	 * @param idx
 	 * @param filter
 	 */
-	<T, R, C> void addFilterByIndex(int idx, Predicate<T> predicate, CallBack<R> callBack);
+	<T, R> void addFilterByIndex(int idx, Filte<T, R> filter);
 
 	/**
 	 * 增加过滤器集合

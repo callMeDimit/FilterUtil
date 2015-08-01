@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.dimit</groupId>
 	<artifactId>FilterUtil</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1-beta</version>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -12,9 +12,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
+			<groupId>com.dimit</groupId>
+			<artifactId>classSearch</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
