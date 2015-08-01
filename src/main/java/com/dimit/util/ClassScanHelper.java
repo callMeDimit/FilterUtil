@@ -3,8 +3,6 @@ package com.dimit.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -28,7 +26,6 @@ import com.dimit.search.util.SystemPropertyUtils;
 public class ClassScanHelper {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClassScanHelper.class);
 	private static final ClassLoader CLASS_LOADER = ClassUtils.getDefaultClassLoader();
-	private static final String BASE_PATH = baseName(CLASS_LOADER);
 	private static final Properties CONFIG = loadProperties();
 	/** 资源搜索分析器 */
 	private static ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
@@ -88,21 +85,6 @@ public class ClassScanHelper {
 	}
 
 	/**
-	 * 获取classpath绝对路径
-	 * @param classloader
-	 * @return
-	 */
-	private static String baseName(ClassLoader classloader) {
-		URI uri = null;
-		try {
-			uri = classloader.getResource("").toURI();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-		return new File(uri).getAbsolutePath();
-	}
-
-	/**
 	 * 扫描filter
 	 * @param dir
 	 * @param baseName
@@ -111,17 +93,6 @@ public class ClassScanHelper {
 	@SuppressWarnings("unchecked")
 	private static <T, R> void scanFilter(File dir) {
 		String className = StringUtils.resolverpackage(dir.getAbsolutePath());
-		/*String className = dir.getAbsolutePath().substring(BASE_PATH.length() + 1);
-		int dot = className.indexOf('.');
-		if (dot > -1) {
-			className = className.substring(0, dot);
-		}
-		if (className.indexOf('\\') > -1) {
-			className = className.replace('\\', '.');
-		}
-		if (className.indexOf('/') > -1) {
-			className = className.replace('/', '.');
-		}*/
 		Class<Filte<T, R>> clazz = null;
 		try {
 			clazz = (Class<Filte<T, R>>) CLASS_LOADER.loadClass(className);

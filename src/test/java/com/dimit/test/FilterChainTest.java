@@ -54,7 +54,5 @@ public class FilterChainTest {
 	 */
 	@Test
 	public void dymicAddFilterTest() {
-		ClassScanHelper.init();
-		ChainFactory context = FilterChainContext.getInstance();
 	}
 }
