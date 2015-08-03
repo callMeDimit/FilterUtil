@@ -32,17 +32,21 @@ public interface ChainFactory {
 	 * @param chainName 链名称
 	 * @param idx 加入的位置 (取值范围 idx >=0 并且idx < filters.size())
 	 * @param filter 拦截器对象
-	 * @param isThorw 在未找到指定链时是否抛出异常
-	 * @throws ArrayIndexOutOfBoundsException
+	 * @param name filter名称
+	 * @param isThrow 在未找到指定链时是否抛出异常
+	 * @throws ChainNotFoundException
 	 */
-	<T, R> void addFilterForChain(String chainName, int idx, Filte<T, R> filter, boolean isThorw);
+	<T, R> void addFilterForChain(String chainName, int idx, Filte<T, R> filter, String name, boolean isThrow);
 
 	/**
 	 * 向指定链尾部加入拦截器
 	 * @param chainName
 	 * @param filter
+	 * @param name filter名称
+	 * @param isThrow 在未找到指定链时是否抛出异常
+	 * @throws ChainNotFoundException
 	 */
-	<T, R> void addFilterInTail(String chainName, Filte<T, R> filter);
+	<T, R> void addFilterInTail(String chainName, Filte<T, R> filter, String name, boolean isThrow);
 	
 	/**
 	 * 增加使用注解的filter
@@ -54,8 +58,8 @@ public interface ChainFactory {
 	 * 向指定链头部加入拦截器
 	 * @param chainName
 	 * @param filter
+	 * @param isThrow
+	 * @throws ChainNotFoundException
 	 */
-	<T, R> void addFilterInHead(String chainName, Filte<T, R> filter);
-	
-	
+	<T, R> void addFilterInHead(String chainName, Filte<T, R> filter, boolean isThrow);
 }

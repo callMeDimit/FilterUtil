@@ -24,10 +24,20 @@ public class FilterChainImpl implements FilterChain {
 	public <T, R> void addFilterByLast(Predicate<T> predicate, CallBack<R> callBack) {
 		filters.add(FilterBuilder.builder(predicate, callBack));
 	}
+	
+	@Override
+	public <T, R> void addFilterByLast(Filte<T, R> filter) {
+		filters.add(filter);
+	}
 
 	@Override
 	public <T, R> void addFilterByHead(Predicate<T> predicate, CallBack<R> callBack) {
 		filters.add(0, FilterBuilder.builder(predicate, callBack));
+	}
+	
+	@Override
+	public <T, R> void addFilterByHead(Filte<T, R> filter) {
+		filters.add(0,filter);
 	}
 
 	@Override

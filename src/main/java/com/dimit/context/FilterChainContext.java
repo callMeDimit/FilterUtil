@@ -14,6 +14,7 @@ import com.dimit.intereface.ChainFactory;
 import com.dimit.intereface.Filte;
 import com.dimit.intereface.FilterChain;
 import com.dimit.intereface.LifeCycle;
+import com.dimit.search.util.StringUtils;
 import com.dimit.wrap.FilterChainWarp;
 import com.dimit.wrap.FilterWarp;
 
@@ -111,11 +112,57 @@ public class FilterChainContext implements ChainFactory, LifeCycle {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T, R> void addFilterForChain(String chainName, int idx, Filte<T, R> filter, boolean isThorw) {
+	public <T, R> void addFilterForChain(String chainName, int idx, Filte<T, R> filter, String name, boolean isThrow) {
 		FilterChain chain = chains.get(chainName);
 		FilterChainWarp chainWrap = chainWarps.get(chainName);
 		if (chain == null) {
-			if (isThorw) {
+			if (isThrow) {
+				throw new ChainNotFoundException(String.format("名称为%s的链未找到", chainName));
+			} else {
+				chain = ChainBuilder.build();
+				chains.put(chainName, chain);
+				chainWrap = FilterChainWarp.valueOf(chainName);
+				chainWarps.put(chainName, chainWrap);
+			}
+		}
+		if(!StringUtils.hasText(name)) {
+			name = NameBuilder.getName(chainName);
+		}
+		FilterWarp warp = FilterWarp.valueOf(name, idx, (Class<Filte<T, R>>) filter.getClass());
+		chainWrap.addFilterWrap(warp);
+		chain.addFilterByIndex(idx, filter);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T, R> void addFilterInTail(String chainName, Filte<T, R> filter, String name, boolean isThrow) {
+		FilterChain chain = chains.get(chainName);
+		FilterChainWarp chainWrap = chainWarps.get(chainName);
+		if (chain == null) {
+			if (isThrow) {
+				throw new ChainNotFoundException(String.format("名称为%s的链未找到", chainName));
+			} else {
+				chain = ChainBuilder.build();
+				chains.put(chainName, chain);
+				chainWrap = FilterChainWarp.valueOf(chainName);
+				chainWarps.put(chainName, chainWrap);
+			}
+		}
+		if(!StringUtils.hasText(name)) {
+			name = NameBuilder.getName(chainName);
+		}
+		FilterWarp warp = FilterWarp.valueOf(name, Integer.MAX_VALUE, (Class<Filte<T, R>>) filter.getClass());
+		chainWrap.addFilterWrap(warp);
+		chain.addFilterByLast(filter);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T, R> void addFilterInHead(String chainName, Filte<T, R> filter, boolean isThrow) {
+		FilterChain chain = chains.get(chainName);
+		FilterChainWarp chainWrap = chainWarps.get(chainName);
+		if (chain == null) {
+			if (isThrow) {
 				throw new ChainNotFoundException(String.format("名称为%s的链未找到", chainName));
 			} else {
 				chain = ChainBuilder.build();
@@ -125,18 +172,8 @@ public class FilterChainContext implements ChainFactory, LifeCycle {
 			}
 		}
 		String filterName = NameBuilder.getName(chainName);
-		FilterWarp warp = FilterWarp.valueOf(filterName, idx, (Class<Filte<T, R>>) filter.getClass());
+		FilterWarp warp = FilterWarp.valueOf(filterName, 0, (Class<Filte<T, R>>) filter.getClass());
 		chainWrap.addFilterWrap(warp);
-		chain.addFilterByIndex(idx, filter);
-	}
-
-	@Override
-	public <T, R> void addFilterInTail(String chainName, Filte<T, R> filter) {
-
-	}
-
-	@Override
-	public <T, R> void addFilterInHead(String chainName, Filte<T, R> filter) {
-
+		chain.addFilterByHead(filter);
 	}
 }

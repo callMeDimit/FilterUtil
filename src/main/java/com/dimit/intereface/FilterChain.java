@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import com.dimit.exception.ChainNotFoundException;
+
 /**
  * 责任链接口
  * @author dimit
@@ -15,12 +17,27 @@ public interface FilterChain {
 	 * @param filter
 	 */
 	<T, R> void addFilterByLast(Predicate<T> predicate, CallBack<R> callBack);
+	
+	/**
+	 * 在链尾添加过滤器
+	 * @param filter 过滤器
+	 * @param name 过滤器名称
+	 * @param isThrow 是否抛出异常
+	 * @throws ChainNotFoundException
+	 */
+	<T, R> void addFilterByLast(Filte<T,R> filter);
 
 	/**
 	 * 在头部增加过滤器
 	 * @param filter
 	 */
 	<T, R> void addFilterByHead(Predicate<T> predicate, CallBack<R> callBack);
+	
+	/**
+	 * 
+	 * @param filter
+	 */
+	<T,R> void addFilterByHead(Filte<T,R> filter);
 
 	/**
 	 * 在指定下标处增加过滤器
